@@ -1,0 +1,6 @@
+package study09_interface;
+
+public class Calc1 implements Calc {
+
+
+}

@@ -1,0 +1,21 @@
+package study09_interface;
+
+public interface Calc1 {
+	double PI = 3.14;
+	static final int TIMEOUT = initTimeout();
+
+	static int initTimeout() {
+		System.out.println("초기화 메서드 실행");
+		return 5000;
+	}
+
+	default void init() {
+		System.out.println("Config 인터페이스 로딩됨");
+	}
+
+	static void printConfig() {
+		System.out.println("TIMEOUT: " + TIMEOUT);
+	}
+
+
+}
