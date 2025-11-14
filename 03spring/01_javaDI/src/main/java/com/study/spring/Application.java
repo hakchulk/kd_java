@@ -15,6 +15,7 @@ public class Application {
 		//SpringApplication.run(Application.class, args);
 		
 		ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
+		
 		Member member1 = (Member)context.getBean("member1");
 		member1.print();
 		Member member2 = context.getBean("hello", Member.class);
@@ -23,6 +24,7 @@ public class Application {
 		Printer printer = context.getBean("printerB", Printer.class);
 		member1.setPrinter(printer);
 		member1.print();
+		
 	}
 
 }
