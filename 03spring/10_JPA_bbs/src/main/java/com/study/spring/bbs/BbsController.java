@@ -52,7 +52,7 @@ public class BbsController {
 	}
 
 	@GetMapping("/api/bbs/{id}")
-	public Optional<Bbs> bbsList(@PathVariable("id") Long id) {
+	public Optional<Bbs> findById(@PathVariable("id") Long id) {
 		return bbsRepository.findById(id);
 	}
 

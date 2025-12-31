@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,26 +37,29 @@ public class FileService {
 		fe.setTitle(req.getTitle());
 		fe.setContent(req.getContent());
 
-		MultipartFile file = req.getFileUpload();
-		if (file != null && !file.isEmpty()) {
-			String originalFilename = file.getOriginalFilename();
-			String newName = UUID.randomUUID() + "_" + originalFilename;
-			log.info("----fileUpload() getOriginalFilename() : " + newName);
-			log.info("----fileUpload() fileDir : " + fileDir);
-			File folder = new File(fileDir);
-			if (!folder.exists())
-				folder.mkdir();
+		List<MultipartFile> files = req.getFileUpload();
+		if (files != null && !files.isEmpty())
+			log.info("----fileCreate() files.size() : " + files.size());
+		for (MultipartFile file : files) {
+			if (file != null && !file.isEmpty()) {
+				String originalFilename = file.getOriginalFilename();
+				String newName = UUID.randomUUID() + "_" + originalFilename;
+				log.info("----fileUpload() getOriginalFilename() : " + originalFilename);
+				File folder = new File(fileDir);
+				if (!folder.exists())
+					folder.mkdir();
 
 //			File destFile = new File(fileDir + '/' + newName);
 //			file.transferTo(destFile);
-			byte[] fileData = file.getBytes();
+				byte[] fileData = file.getBytes();
 
-			Files.write(Paths.get(fileDir + '/' + newName), fileData); // 원본 저장
-			Thumbnails.of(new ByteArrayInputStream(fileData)).size(100, 100).outputFormat("jpg")
-					.toFile(fileDir + "/thumb_100_" + newName); // thumbnail 저장
-			fe.setImageFileName(newName);
+				Files.write(Paths.get(fileDir + '/' + newName), fileData); // 원본 저장
+				Thumbnails.of(new ByteArrayInputStream(fileData)).size(100, 100).outputFormat("jpg")
+						.toFile(fileDir + "/thumb_100_" + newName); // thumbnail 저장
+				fe.setImageFileName(newName);
+			}
+//			fileRepo.save(fe);
 		}
-		fileRepo.save(fe);
 
 	}
 
